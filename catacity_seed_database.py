@@ -18,9 +18,9 @@ session = DBSession()
 #    for table in reversed(meta.sorted_tables):
 #        con.execute(table.delete())
 #    trans.commit()
-# ------------ End magic, bad magic that is
+# ------------ End magic, bad non-working magic that is
 
-# TO WIPE ALL DATA FROM DATABASE, USE "psql catacity" AND ENTER:
+# TO MANUALLY WIPE ALL DATA FROM DATABASE, USE "psql catacity" AND ENTER:
 #     TRUNCATE item, acct, category;
 
 # ----- Add seed data -----
