@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>New Item</title>
+</head>
+<body>
+	
+<h1>New Item in Category {{category.name}}</h1>
+
+<form action="/category/{{category.id}}/new/" method="post">
+	
+	<p>Title:</p>
+	<input type="text" size="80" name="title">
+	<p>Description:</p>
+	<input type="text" size="250" name="description">
+	<p></p>
+	<input type="submit" value="Create">
+	<a href="{{ url_for('showItems', category_id=category.id) }}">Cancel</a>
+
+</form>
+
+</body>
+</html>

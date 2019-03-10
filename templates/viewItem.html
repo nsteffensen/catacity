@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Mediator - View Item Detail</title>
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<br><br>
+<div class="pane">
+	<div class="header">
+		<h1>Detail View for Item {{item.title}}</h1>
+	</div>
+	<h2>Category: {{category.name}}</h2>
+
+	<a href = '{{ url_for('editItem', category_id=category.id, item_id=item.id) }}'>Edit Item</a><br><br>
+	<a href = '{{ url_for('deleteItem', category_id=category.id, item_id=item.id) }}'>Delete Item</a><br><br>
+
+	<div class="flash">
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<ul>
+			{% for message in messages %}
+				<li><strong> {{ message }} </strong></li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+	{% endwith %}
+	</div>
+
+	<table>
+		<tr>
+			<td>{{item.id}}</td>
+			<td>{{item.title}}</td>
+			<td>{{item.description}}</td>
+			<td>{{item.category_id}}</td>
+			<td>{{item.acct_id}}</td>
+		</tr>
+	</table>
+
+</div>
+
+</body>
+</html>

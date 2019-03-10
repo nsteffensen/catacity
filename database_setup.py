@@ -43,7 +43,7 @@ class Item(Base):
 	description = Column(String(250))
 	category_id = Column(Integer, ForeignKey('category.id'))
 	category = relationship(Category)
-	user_id = Column(Integer, ForeignKey('acct.id'))
+	acct_id = Column(Integer, ForeignKey('acct.id'))
 	user = relationship(User)
 
 	@property
@@ -51,9 +51,8 @@ class Item(Base):
 		#Returns object data in easily serializeable format
 		return {
 			'id'			: self.id,
-			'name'			: self.name,
-			'description'	: self.description,
 			'title'			: self.title,
+			'description'	: self.description,
 		}
 
 #------ Must be at end of file:

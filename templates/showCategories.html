@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Mediator - Show all categories</title>
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+<br><br>
+<div class="pane">
+	<div class="header">
+		<h1>List of All Categories</h1>
+	</div>
+
+	<a href = '/item/new/'>Create New Category</a><br><br>
+
+	<div class="flash">
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<ul>
+			{% for message in messages %}
+				<li><strong> {{ message }} </strong></li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+	{% endwith %}
+	</div>
+
+	<table>
+
+		{% for c in categories %}
+		<tr>
+			<td>{{c.id}}</td>
+			<td>{{c.name}}</td>
+			<td><a href="{{ url_for('showItems', category_id=c.id) }}">View</a></td>
+
+		</tr>
+		{% endfor %}
+			
+	</table>
+</div>
+
+</body>
+</html>

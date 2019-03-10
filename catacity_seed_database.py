@@ -1,3 +1,8 @@
+
+
+OBSOLETE (at the moment), use the db_xxx.sql files as described in README.md
+
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -25,30 +30,40 @@ session = DBSession()
 
 # ----- Add seed data -----
 # categories = ['Movies', 'Books', 'Albums']
-category1 = Category(id=1, name='Movies')
-session.add(category1)
-session.commit()
+#category1 = Category(id=1, name='Movies')
+#session.add(category1)
+#session.commit()
+#
+#category2 = Category(id=2, name='Books')
+#session.add(category2)
+#session.commit()
+#
+#category3 = Category(id=3, name='Albums')
+#session.add(category3)
+#session.commit()
+#
+## users = ['Alice', 'Bob']
+#user1 = User(id=1, name='Alice', email='alice@sample.com')
+#session.add(user1)
+#session.commit()
+#
+#user2 = User(id=2, name='Bob', email='bob@sample.com')
+#session.add(user2)
+#session.commit()
 
-category2 = Category(id=2, name='Books')
-session.add(category2)
-session.commit()
 
-category3 = Category(id=3, name='Albums')
-session.add(category3)
-session.commit()
 
-# users = ['Alice', 'Bob']
-user1 = User(id=1, name='Alice', email='alice@sample.com')
-session.add(user1)
-session.commit()
+DOESN'T WORK FOR SOME REASON
 
-user2 = User(id=2, name='Bob', email='bob@sample.com')
-session.add(user2)
-session.commit()
+MAYBE it was acct_id instead of user_id at the time?  I don't think so but....
 
 # items
 item1 = Item(id=1, title='Number 13', description='First movie', category_id=1, user_id=1)
+session.add(item1)
+session.commit()
 
 item2 = Item(id=2, title='Woman 2 Woman', description='Second movie', category_id=1, user_id=2)
+session.add(item2)
+session.commit()
 
 

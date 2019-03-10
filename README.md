@@ -12,45 +12,21 @@ If using Vagrant, download the VM configuration:
 
 ### Set up the database: 
 
-**Create Database**
-In psql, create the database:
+Only once, run the following at the command line:
 ```
-create database catacity;
+psql -a -f db_create.sql
 ```
-
-**Create Tables**
-
-(1) Category table
 ```
-CREATE TABLE category(
-  id serial PRIMARY KEY,
-  name VARCHAR (80) NOT NULL
-);
+psql -d catacity -a -f db_setup.sql
 ```
-(2) User table (named acct because in PostreSQL the keyword “user” is reserved and cannot be used as a table name without convolutions.)
+The database begins empty but a script is provided to seed it.  WARNING, running the script deletes all existing data first.  Any time you wish to delete the ENITRE database contents and replace with seed data, run the following:
 ```
-CREATE TABLE acct(
-  id serial PRIMARY KEY,
-  name VARCHAR (80) NOT NULL,
-  email VARCHAR (250) UNIQUE NOT NULL
-);
+psql -d catacity -a -f db_seed.sql
 ```
-(3) Item table
+Just for reference, if you wish to destroy the entire database (you will have ro rerun the steps above to run the app), run the following:
 ```
-CREATE TABLE item(
-  id serial PRIMARY KEY,
-  title VARCHAR (80) NOT NULL,
-  description VARCHAR (250),
-  category_id integer NOT NULL REFERENCES category (id),
-  acct_id integer NOT NULL REFERENCES acct (id)
-);
+psql -a -f db_destroy.sql
 ```
 
-**Optional step: Erase data from existing database**
-If you have alread run the project but wish to reset to the original seed database, first manually wipe the tables.  In psql execute:
-```
-TRUNCATE item, acct, category;
-```
 
-** Seed the database
-Run the python script __catacity_seed_database.py__
+
