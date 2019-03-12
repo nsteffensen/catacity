@@ -12,8 +12,14 @@
 	
 	<p>Title:</p>
 	<input type="text" size="80" name="title" value="{{ item.title }}">
-	<p>Title:</p>
+	<p>Description:</p>
 	<input type="text" size="250" name="description" value="{{ item.description }}">
+	<p>Category:</p>
+    <select name="category_select" class="selectpicker form-control">
+      {% for c in categories %}
+      <option value="{{ c.id }}" {% if c.id == category.id %} selected {% endif %}>{{ c.name }}</option>
+      {% endfor %}
+    </select>
 	<p></p>
 	<input type="submit" value="Save">
 	<a href="{{ url_for('showItems', category_id=category.id, item_id=item.id) }}">Cancel</a>

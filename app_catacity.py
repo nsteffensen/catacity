@@ -5,28 +5,151 @@ from sqlalchemy        import create_engine
 from sqlalchemy.orm    import sessionmaker
 from database_setup    import Base, Category, User, Item   
 
+# Imports for anti-forgery state token
+from flask import session as login_session # "session" already used for db
+import random, string
+
+# Imports for OAuth
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
+import httplib2
+import json
+from flask import make_response
+import requests  # improved over urllib2
+
+#auth = HTTPBasicAuth()
+CLIENT_ID = json.loads(
+    open('client_secrets.json', 'r').read())['web']['client_id']
+
+
 engine = create_engine('postgresql:///catacity')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind = engine)
 session = DBSession()
 
-########################################
+#------------------------------------------------------
+#  Login
+#------------------------------------------------------
+@app.route('/login')
+def showLogin():
+	# Create anti-forgery state token
+	state = ''.join(random.choice(
+		string.ascii_uppercase + string.digits) for x in xrange(32))
+	login_session['state'] = state
+	return render_template('login.html', STATE=state)
 
-# This is just a test page for development.  In production, root should map to /categories
-@app.route('/')
+#------------------------------------------------------
+#  Google OAuth2
+#------------------------------------------------------
+@app.route('/gconnect', methods=['POST'])
+def gconnect():
+  # Bail if the session token is not right; might be a CSRF attack.
+  if request.args.get('state') != login_session['state']:
+    response = make_response(json.dumps('Invalid state token'), 401)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+ 
+  code = request.data  # This is the one-time use code from Google via client
+
+#  return("<p>Got this far in gconnect.</p>State: " + login_session['state'])
+
+  # Upgrade the authorization code into a credentials object
+  try:
+    oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+    oauth_flow.redirect_uri = 'postmessage'
+    credentials = oauth_flow.step2_exchange(code) # exchanges auth code for credentials object
+#    return("<p>Succeeded getting credentials</p>")
+  except FlowExchangeError:
+    response = make_response(json.dumps('Failed to upgrade the auth code.'), 401)
+    response.headers['Content-Type'] = 'application/json'
+#    return("<p>Failed getting credentials</p>")
+    return response
+
+  # Verify access token is valid by sending it to Google for a check
+  access_token = credentials.access_token
+  url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
+    % access_token)
+  h = httplib2.Http()
+  result = json.loads(h.request(url, 'GET')[1])
+
+  # If there was an error in the access token info, abort.
+  if result.get('error') is not None:
+    response = make_response(json.dumps(result.get('error')), 500)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+  #Verify that the access token is for the intended user
+  gplus_id = credentials.id_token['sub']
+  if result['user_id'] != gplus_id:
+    response = make_response(json.dumps(
+      "Token UserID does not match given UserID"), 401)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+  # Verify that the access token is valid for this app.
+  if result['issued_to'] != CLIENT_ID:
+    response = make_response(json.dumps("Token ClientID does not match this app"), 401)
+    print "Token's client ID does not match this app."
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+  # Check if user is already logged in 
+  stored_credentials = login_session.get('credentials')
+  stored_gplus_id = login_session.get('gplus_id')
+  if stored_credentials is not None and gplus_id == stored_gplus_id:
+    response = make_response(json.dumps("User is already logged in."), 200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
+
+  # Passed all checks!
+
+  # Store the access token in the session for later use.
+  #login_session['credentials'] = credentials
+  login_session['provider'] = 'google'
+  login_session['access_token'] = credentials.access_token
+  login_session['gplus_id'] = gplus_id
+
+  # Get User info
+  userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
+  params = {'access_token': credentials.access_token, 'alt':'json'}
+  answer = requests.get(userinfo_url, params=params)
+  data = json.loads(answer.text)
+  # "data" now contains all info listed in Google's getOpenIdConnect response
+
+  login_session['username'] = data["name"]
+  login_session['picture'] = data["picture"]
+  login_session['email'] = data["email"]
+
+  test =  '<p>Username: ' + login_session['username'] + '</p>'
+  test += '<p>Email: '    + login_session['email'] + '</p>'
+  test += '<p>Picture: '  + login_session['picture'] + '</p>'
+  flash("You are no logged in as %s" %login_session['username'])
+  return test
+
+########################################
+# Debug pages
+@app.route('/test')
 def route_checklist():
 	return render_template('route-checklist.html')
 
-# This is a debug function that just dumps all items in all categories
 @app.route('/allitems/')
 def showAllItems():
 	items = session.query(Item).all()
 	return render_template('showAllItems.html', items = items)
 
+@app.route('/state')
+def showState():
+	state = ''.join(random.choice(
+		string.ascii_uppercase + string.digits) for x in xrange(32))
+	login_session['state'] = state
+	return "Session state: %s" %login_session['state']
+########################################
+
 #------------------------------------------------------
 #  LIST Categories
 #------------------------------------------------------
 # This is essentially the main page; it lists all categories
+@app.route('/')
 @app.route('/categories/')
 def showCategories():
 	categories = session.query(Category).all()
@@ -83,13 +206,15 @@ def editItem(category_id, item_id):
 		if selItem != [] :
 			selItem.title = request.form['title']
 			selItem.description = request.form['description']
+			selItem.category_id = request.form.get('category_select')
 			session.add(selItem)
 			session.commit()
 			flash("Edited Item: " + selItem.title)
 		return redirect(url_for('showAllItems'))
 	else:
 		category = session.query(Category).filter_by(id = category_id).one()
-		return render_template('editItem.html', category = category, item = selItem)
+		categories = session.query(Category).all()
+		return render_template('editItem.html', categories = categories, category = category, item = selItem)
 
 
 #------------------------------------------------------
@@ -114,39 +239,27 @@ def deleteItem(category_id, item_id):
 #------------------------------------------------------
 @app.route('/catalog.json/')
 def allItemsJson():
-#	categories = session.query(Category).all()
-#	return jsonify(Categories=[c.serialize for c in categories])
-
-#	items = session.query(Item).all()
-#	return jsonify(Items=[i.serialize for i in items])
-
-	categories = session.query(Category).all()
-	items = session.query(Item).all()
-
-	for c in categories:
-    	Items += c.serialize
-    	for i in items:
-        	Items += i.serialize  
-	return jsonify(Items)
-
-
-
+	categories = session.query(Category).all()  # List of objects
+	CategoryList = [c.serialize for c in categories] #List of dicts
+	for cl in CategoryList:  # Single dict
+		items = session.query(Item).filter_by(category_id = cl['id']).all()
+		ItemList = [i.serialize for i in items] # List of dicts
+		cl['items'] = ItemList  # Append List of item dicts to this Cat dict
+	return jsonify(CategoryList) # Convert List of dicts to JSON
 
 @app.route('/category/<int:category_id>/item/<int:item_id>/json/')
 def itemJson(category_id, item_id):
-
 	item = session.query(Item).filter_by(id=item_id, category_id=category_id).one()
 	if item != [] :
 		return jsonify(item.serialize)
 	else:
 		return "Item not found in database."
 
-
 #------------------------------------------------------
 #  Invoke when main
 #------------------------------------------------------
 if __name__ == '__main__':
-	app.secret_key = 'swordfish'
+	app.secret_key = 'swordfish'  # Needed for sessions for flash msgs
 	app.debug = True
 	app.run(host = '0.0.0.0', port = 5000)
 

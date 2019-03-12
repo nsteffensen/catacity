@@ -1,3 +1,4 @@
 *.pyc
 ignored_stuff/
 
+*.json
