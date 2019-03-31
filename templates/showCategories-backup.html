@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Mediator - Show all categories</title>
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+<div id="navbar"> 
+  <ul> 
+	<li style="float: left"><a href="/">Welcome to Mediator!</a></li>
+	<li style="float: left"><a href="/">Categories</a></li> 
+	<li style="float: right"><a href="/login">Login</a></li> 
+	<li style="float: right"><a href="/about">About</a></li> 
+  </ul> 
+</div> 
+
+<br><br>
+<div class="pane">
+	<div class="header">
+		<h1>List of All Categories</h1>
+	</div>
+
+	<div class="flash">
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<ul>
+			{% for message in messages %}
+				<li><strong> {{ message }} </strong></li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+	{% endwith %}
+	</div>
+
+	<table>
+
+		{% for c in categories %}
+		<tr>
+			<td>{{c.id}}</td>
+			<td>{{c.name}}</td>
+			<td><a href="{{ url_for('showItems', category_id=c.id) }}">View</a></td>
+
+		</tr>
+		{% endfor %}
+			
+	</table>
+</div>
+
+</body>
+</html>

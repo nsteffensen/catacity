@@ -1,6 +1,8 @@
 # UDACITY Catalog App Project - Nils Steffensen
 
-This Python script is an assignment part of the Full Stack Developer Nonadegree from Udacity, being submitted by Nils Steffensen.
+This Python script is an assignment part of the Full Stack Developer Nonadegree from Udacity, being submitted by Nils Steffensen.  It allows a user to log in with their Google account, and save media items under the categories of Albums, Books or Movies.  An SQL script is available to populate sample items (obviously not under your account).
+
+View a Category (the View link next to the Category name) in order to add new items.
 
 ## Pre-requiste setup
 
@@ -28,5 +30,16 @@ Just for reference, if you wish to destroy the entire database (you will have ro
 psql -a -f db_destroy.sql
 ```
 
+### Create a Google Client ID
+* To get a client ID, follow directions at https://developers.google.com/identity/sign-in/web/server-side-flow.
+* Save the client information in a file named "client_secrets.json" in the project directory.
+* In login.html replace the client ID with your own.
+
+### Run the app
+Run the app from the command line within vagrant:
+```
+python app_catacity.py
+```
+In a web browser navigate to http://localhost:5000/.
 
 

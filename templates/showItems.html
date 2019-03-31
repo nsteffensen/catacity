@@ -1,18 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Mediator - Show all items</title>
-	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-<br><br>
+{% extends "base.html" %}
+{% block title %}Categories{% endblock %}
+
+
+{% block content %}
+
 <div class="pane">
 	<div class="header">
 		<h1>List of All Items in Category {{category.name}}</h1>
 	</div>
 
-	<a href = '{{ url_for('newItem', category_id=category.id) }}'>Create New Item</a><br><br>
+	<h2><a href = '{{ url_for('newItem', category_id=category.id) }}'>Create New Item</a></h2>
+	<br><br>
 
 	<div class="flash">
 	{% with messages = get_flashed_messages() %}
@@ -27,6 +25,13 @@
 	</div>
 
 	<table>
+		<tr>
+			<th>Item ID</th>
+			<th>Title</th>
+			<th>Description</th>
+			<th>Category ID</th>
+			<th>User ID</th>
+		</tr>
 
 		{% for i in items %}
 		<tr>
@@ -43,5 +48,4 @@
 	</table>
 </div>
 
-</body>
-</html>
+{% endblock %}

@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>New Item</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Categories{% endblock %}
+
+
+{% block content %}
 	
+<div class="pane">
+
 <h1>New Item in Category {{category.name}}</h1>
 
 <form action="/category/{{category.id}}/new/" method="post">
@@ -20,5 +20,6 @@
 
 </form>
 
-</body>
-</html>
+</div>
+
+{% endblock %}

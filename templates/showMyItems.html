@@ -5,11 +5,13 @@
 {% block content %}
 <div class="pane">
 	<div class="header">
-		<h1>List of All Items</h1>
+		<h1>List of My Items</h1>
 	</div>
 
+	<p>To add a new item to a category, go to that category.</p>
 
 	<table>
+
 		<tr>
 			<th>Item ID</th>
 			<th>Title</th>
@@ -25,7 +27,6 @@
 			<td>{{i.description}}</td>
 			<td>{{i.category_id}}</td>
 			<td>{{i.acct_id}}</td>
-
 		</tr>
 		{% endfor %}
 			

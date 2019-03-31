@@ -1,22 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Index</title>
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Categories{% endblock %}
 
+
+{% block content %}
+
+<div class="pane">
 	<h1>List of routes to test:</h1>
-	<ul>
-		<li><a href="/allitems">showAllItems()</a></li>
-		<li><a href="/categories">showCategories()</a> when not logged in, no [Add Item]</li>
-		<li><a href="/categories">showCategories()</a> when logged in, shall have [Add Item]</li>
-		<li><a href="/category/1">showItems()</a></li>
-		<li><a href="/category/1/new">newItem()</a></li>
-		<li><a href="/category/1/item/1/edit">editItem()</a></li>
-		<li><a href="/category/1/item/1/delete">deleteItem()</a></li>
-		<li><a href="/category/1/item/1/json">JSON endpoint for an item</a></li>
-	</ul>
-	
-</body>
-</html>
+	<p>This page requires the database to have a CategoryID of 1, and an ItemID of 1.  The seed database has these records.</p>
+	<table>
+		<tr><td><a href="/allitems">showAllItems()</a></td></tr>
+		<tr><td><a href="/categories">showCategories()</a></td></tr>
+		<tr><td><a href="/category/1">showItems()</a> when not logged in, no [Add Item]</td></tr>
+		<tr><td><a href="/category/1">showItems()</a> when logged in, shall have [Add Item]</td></tr>
+		<tr><td><a href="/category/1/new">newItem()</a></td></tr>
+		<tr><td><a href="/category/1/item/1/edit">editItem()</a></td></tr>
+		<tr><td><a href="/category/1/item/1/delete">deleteItem()</a></td></tr>
+		<tr><td><a href="/category/1/item/1/json">JSON endpoint for an item</a></td></tr>
+	</table>
+</div>	
+
+{% endblock %}

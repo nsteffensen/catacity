@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{% block title %}{% endblock %} from Mediator!</title>
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+
+	<div id="holder">	
+		<div id="navbar"> 
+		  <ul> 
+			<li style="float: left"><a href="/">Categories</a></li> 
+			<li style="float: left"><a href="/allitems">All Items</a></li> 
+			<li style="float: left"><a href="/myitems">My Items</a></li> 
+			<li style="float: right"><a href="/test">Test</a></li> 
+			<li style="float: right"><a href="/login">Login/out</a></li> 
+		  </ul> 
+		</div> 
+
+		<br><br><br>
+
+		<div class="flash">
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				<p>
+				{% for message in messages %}
+					<p><strong> {{ message }} </strong></p>
+				{% endfor %}
+				</p>
+			{% endif %}
+		{% endwith %}
+		</div>
+	    
+	    <div id="content">
+	    	{% block content %}{% endblock %}
+	    </div>
+
+	</div>
+
+</body>
+</html>

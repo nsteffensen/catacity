@@ -1,6 +1,12 @@
-body            { font-family: sans-serif; background-color: #333333; background-image: url('https://cloud.githubusercontent.com/assets/9041401/6119508/7cbced14-b07e-11e4-9dbd-f01488203879.jpg')}
- h1, h2, h3, h4       { color: #CCCCCC; }
-h1, h2          { font-family: 'Georgia', serif; margin: 0; }
+body{
+	font-family: 'Optima';
+	background-color: #c1946a; 
+	/* background-image: url('https://cloud.githubusercontent.com/assets/9041401/6119508/7cbced14-b07e-11e4-9dbd-f01488203879.jpg') */
+}
+
+
+h1, h2, h3, h4  { color: #CCCCCC; }
+h1, h2          { font-family: 'Optima', sans-serif; margin: 10; }
 h1              { border-bottom: 2px solid #eee; }
 h2              { font-size: 1.2em; }
 
@@ -8,12 +14,118 @@ p               { color: #CCCCCC;}
 
 a {text-decoration: none; color:#FFFFCC; font-size: .75em;}
 
-.pane {position:absolute; left: 25%; border: 2px solid;
-    border-radius: 25px; padding: 5px; margin: 5px; border-color: #999999; background-color: #333333; }
-.header         {left:50%; text-align: center;}
-.name {width:50%;display: inline-block; float: left;}
-.description {}
-.price {text-align: right; width:50%; float: right; }
-.editdeletepane{}
+.pane {
+	/*position:absolute; */
+	/*left: 25%;*/ 
+	border: 5px solid;
+    border-radius: 10px; 
+    padding: 5px; margin: 5px; 
+    border-color: #405d27; 
+    background-color: #82b74b; 
+}
 
-.flash          { background: #cee5F5; }
+.header         {left:50%; text-align: center;}
+.name           {width:50%;display: inline-block; float: left;}
+.description    {}
+.price          {text-align: right; width:50%; float: right; }
+.editdeletepane	{}
+
+.flash          { background: #000000; }
+
+
+/*
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+/* Change the link color to #111 (black) on hover */
+li a:hover {
+  background-color: #111;
+}
+
+.active {
+  background-color: #4CAF50;
+}
+
+li {
+  border-right: 1px solid #bbb;
+}
+
+li:last-child {
+  border-right: none;
+}
+ul {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+
+table {
+  width: 100%;
+}
+
+th {
+  height: 50px;
+}
+
+th, td {
+  padding: 15px;
+  text-align: left;
+}
+
+th, td {
+  border-bottom: 1px solid #ddd;
+}
+
+tr:hover {background-color: #ff1111;}
+
+/*tr:nth-child(even) {background-color: #f2f2f2;}*/
+
+th {
+  background-color: #4CAF50;
+  color: white;
+}
+
+
+#navbar ul { 
+  margin: 0; 
+  padding: 5px; 
+  list-style-type: none; 
+  text-align: center; 
+  background-color: #000; 
+  } 
+ 
+#navbar ul li {  
+  display: inline; 
+  } 
+ 
+#navbar ul li a { 
+  text-decoration: none; 
+  padding: .2em 1em; 
+  color: #fff; 
+  background-color: #000; 
+  } 
+ 
+#navbar ul li a:hover { 
+  color: #000; 
+  background-color: #fff; 
+  } 
+
+
