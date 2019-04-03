@@ -11,11 +11,11 @@
 <form action="/category/{{category.id}}/new/" method="post">
 	
 	<p>Title:</p>
-	<input type="text" size="80" name="title">
+	<input type="text" size="80" name="title" required>
 	<p>Description:</p>
-	<input type="text" size="250" name="description">
+	<input type="text" size="250" name="description" required>
 	<p></p>
-	<input type="submit" value="Create">
+	<input type="submit" value="Create" required>
 	<a href="{{ url_for('showItems', category_id=category.id) }}">Cancel</a>
 
 </form>

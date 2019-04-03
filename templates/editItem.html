@@ -11,11 +11,11 @@
 <form action="{{ url_for('editItem', category_id=category.id, item_id=item.id) }}" method="post">
 	
 	<p>Title:</p>
-	<input type="text" size="80" name="title" value="{{ item.title }}">
+	<input type="text" size="80" name="title" value="{{ item.title }}" required>
 	<p>Description:</p>
-	<input type="text" size="250" name="description" value="{{ item.description }}">
+	<input type="text" size="250" name="description" value="{{ item.description }}" required>
 	<p>Category:</p>
-    <select name="category_select" class="selectpicker form-control">
+    <select name="category_select" class="selectpicker form-control" required>
       {% for c in categories %}
       <option value="{{ c.id }}" {% if c.id == category.id %} selected {% endif %}>{{ c.name }}</option>
       {% endfor %}
